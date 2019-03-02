@@ -1,8 +1,6 @@
 import React from 'react';
 
-// When destructuring an object, need to put variable names
-// exactly the same as object keys.
-const GridRow = ({numRows, numCols, gridState, disabled, click, row}) => {
+const GridRow = ({numCols, liveCells, disabled, click, row}) => {
   var cells = [];
   let button;
 
@@ -13,9 +11,12 @@ const GridRow = ({numRows, numCols, gridState, disabled, click, row}) => {
     let classNames = 'grid-cell';
     classNames += !disabled ? ' hover' : '';
 
-    if (gridState[row][i] === true) {
-      classNames += ' live';
-    }
+    try {
+      if (liveCells[row][i]) {
+        classNames += ' live';
+      }
+    } catch (e) {}
+
     cell = (
       <div className={classNames} key={i}>
         {button}
