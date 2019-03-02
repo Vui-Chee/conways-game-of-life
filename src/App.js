@@ -9,8 +9,6 @@ const messages = {
   pause: 'Click pause to stop the simulation.',
 };
 
-const Header = () => <h1> Conway's Game of Life </h1>;
-
 const Instructions = () => (
   <div className="instructions">
     <h2> Instructions </h2>
@@ -221,7 +219,7 @@ class App extends Component {
 
     return (
       <React.Fragment>
-        <Header />
+        <h1> Conway's Game of Life </h1>
         <MessageHeader hasStarted={hasStarted} />
         <p>Number of Live Cells : {this.countTotalLiveCells()}</p>
         <Grid
