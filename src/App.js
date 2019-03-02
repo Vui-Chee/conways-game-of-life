@@ -2,40 +2,16 @@ import React, {Component} from 'react';
 import Grid from './Grid';
 
 const messages = {
-  stop:
-    'Simulation stops when there are no live cells or when the simulation is paused.',
+  stop: 'Use arrow keys to move window.',
   start: 'Simulation has started.',
   instruction: 'Select any number cells to be live and click start.',
   pause: 'Click pause to stop the simulation.',
 };
 
-const Instructions = () => (
-  <div className="instructions">
-    <h2> Instructions </h2>
-    <ul>
-      <li> All cells are initially dead. </li>
-      <li>
-        {' '}
-        <b>Click</b> any number of cells to be live.{' '}
-      </li>
-      <li> Then press start to begin the simulation. </li>
-    </ul>
-  </div>
-);
-
-const Rules = () => (
-  <div className="rules">
-    <h3> Rules of Life </h3>
-    <ul>
-      <li> Any live cell with less than two live neighbours dies. </li>
-      <li>Any live cell with two or three live neighbours remains living.</li>
-      <li>Any live cell with more than three live neighbours dies.</li>
-      <li>
-        Any dead cell with exactly three live neighbours becomes a live cell.
-      </li>
-    </ul>
-  </div>
-);
+const DOWN_KEYCODE = 40;
+const UP_KEYCODE = 38;
+const LEFT_KEYCODE = 37;
+const RIGHT_KEYCODE = 39;
 
 const GameButton = ({text, click, customStyles, disabled}) => (
   <div className={`game-button ${customStyles}`}>
@@ -64,19 +40,29 @@ const MessageHeader = ({hasStarted}) => {
 
 class App extends Component {
   state = {
+    startingCorner: {
+      x: 0,
+      y: 0,
+    },
     liveCells: {},
     hasStarted: false,
-    numRows: 15,
-    numCols: 15,
+    numRows: 10,
+    numCols: 10,
   };
 
   componentDidMount() {
+    window.addEventListener('keydown', this.moveWindow);
+
     setInterval(() => {
       const {hasStarted} = this.state;
       if (hasStarted) {
         this.tick();
       }
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.moveWindow);
   }
 
   findNeighbours(i, j) {
@@ -142,11 +128,10 @@ class App extends Component {
     }
   }
 
-  countTotalLiveCells() {
-    const {liveCells} = this.state;
+  countTotalLiveCells(cells) {
     let total = 0;
-    Object.keys(liveCells).forEach(rowStr => {
-      total += Object.keys(liveCells[rowStr]).length;
+    Object.keys(cells).forEach(rowStr => {
+      total += Object.keys(cells[rowStr]).length;
     });
     return total;
   }
@@ -181,6 +166,7 @@ class App extends Component {
     });
 
     this.setState({
+      hasStarted: this.countTotalLiveCells(newLiveCells) > 0,
       liveCells: newLiveCells,
     });
   }
@@ -214,15 +200,47 @@ class App extends Component {
     this.setState({liveCells: {}});
   };
 
+  moveWindow = e => {
+    // Prevents scrolling when using arrow keys.
+    e.preventDefault();
+
+    let newStartingCorner = {
+      x: this.state.startingCorner.x,
+      y: this.state.startingCorner.y,
+    };
+
+    if (e.keyCode === DOWN_KEYCODE) {
+      newStartingCorner.x++;
+    } else if (e.keyCode === UP_KEYCODE) {
+      newStartingCorner.x--;
+    } else if (e.keyCode === LEFT_KEYCODE) {
+      newStartingCorner.y--;
+    } else if (e.keyCode === RIGHT_KEYCODE) {
+      newStartingCorner.y++;
+    } else {
+      // Don't updating state.
+      return;
+    }
+
+    this.setState({startingCorner: newStartingCorner});
+  };
+
   render() {
-    const {numRows, numCols, liveCells, hasStarted} = this.state;
+    const {
+      numRows,
+      numCols,
+      liveCells,
+      hasStarted,
+      startingCorner,
+    } = this.state;
 
     return (
       <React.Fragment>
         <h1> Conway's Game of Life </h1>
         <MessageHeader hasStarted={hasStarted} />
-        <p>Number of Live Cells : {this.countTotalLiveCells()}</p>
+        <p>Number of Live Cells : {this.countTotalLiveCells(liveCells)}</p>
         <Grid
+          startingCorner={startingCorner}
           numRows={numRows}
           numCols={numCols}
           liveCells={liveCells}
@@ -239,8 +257,6 @@ class App extends Component {
           click={this.clearLiveCells}
           disabled={hasStarted}
         />
-        <Instructions />
-        <Rules />
       </React.Fragment>
     );
   }

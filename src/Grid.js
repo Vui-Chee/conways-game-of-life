@@ -1,10 +1,17 @@
 import React from 'react';
 
-const GridRow = ({numCols, liveCells, disabled, click, row}) => {
+const GridRow = ({
+  startingCorner,
+  numCols,
+  liveCells,
+  disabled,
+  click,
+  row,
+}) => {
   var cells = [];
   let button;
 
-  for (var i = 0; i < numCols; i++) {
+  for (var i = startingCorner.y; i < startingCorner.y + numCols; i++) {
     button = <button disabled={disabled} onClick={click.bind(this, row, i)} />;
 
     let cell;
@@ -30,7 +37,11 @@ const GridRow = ({numCols, liveCells, disabled, click, row}) => {
 
 const Grid = props => {
   var rows = [];
-  for (var i = 0; i < props.numRows; i++) {
+  for (
+    var i = props.startingCorner.x;
+    i < props.startingCorner.x + props.numRows;
+    i++
+  ) {
     rows.push(<GridRow key={i} row={i} {...props} />);
   }
   return <div className="grid">{rows}</div>;
