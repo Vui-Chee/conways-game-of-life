@@ -46,8 +46,8 @@ class App extends Component {
     },
     liveCells: {},
     hasStarted: false,
-    numRows: 10,
-    numCols: 10,
+    numRows: 12,
+    numCols: 12,
   };
 
   componentDidMount() {
