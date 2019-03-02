@@ -1,0 +1,86 @@
+* {
+  font-family: Menlo;
+  text-align: center;
+}
+
+html {
+  display: table;
+  margin: auto;
+  background: #8e8a65;
+}
+
+body {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+h1 {
+  color: #d0cdb2;
+}
+
+p,
+li,
+h2,
+h3 {
+  color: #474532;
+}
+
+.game-button {
+  padding: 20px;
+}
+
+.game-button button {
+  height: 50px;
+  width: 150px;
+  outline: none;
+  background: #6a674c;
+  border-radius: 5px;
+  border-color: #7c7958;
+  color: #d0cdb2;
+  font-size: 24px;
+}
+
+.game-button button:hover {
+  color: black;
+  background: #c1bd98;
+}
+
+.game-button.pause button {
+  background: #718183;
+}
+
+.game-button.pause button:hover {
+  background: #bdced0;
+}
+
+.grid {
+  cursor: pointer;
+}
+
+.grid-cell {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 1px;
+  border-style: solid;
+  border-color: grey;
+}
+
+.grid-cell button {
+  width: 30px;
+  height: 30px;
+  background: #b2ad7f;
+  outline: none;
+}
+
+.grid-cell.hover button:hover {
+  background: #494949;
+}
+
+.grid-cell.live button {
+  background: #ffffcc;
+}
+
+.grid-cell.live.hover button:hover {
+  background: #8e8a65;
+}
