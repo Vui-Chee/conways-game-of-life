@@ -82,10 +82,7 @@ class App extends Component {
           } else {
             // Consider case where column element
             // does not exist in this row.
-            deadNeighbours.push({
-              x: currRow,
-              y: currCol,
-            });
+            throw new Error('insert dead neighbour');
           }
         } catch (e) {
           deadNeighbours.push({
@@ -185,7 +182,7 @@ class App extends Component {
       if (newCells[i][j]) {
         this.removeCell(i, j, newCells);
       } else {
-        throw 'insert cell';
+        throw new Error('insert cell');
       }
     } catch (e) {
       this.insertCell(i, j, newCells);
